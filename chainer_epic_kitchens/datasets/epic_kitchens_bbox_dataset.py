@@ -58,6 +58,10 @@ class EpicKitchensBboxDataset(GetterDataset):
         return read_image(img_file, color=True)
 
     def _get_annotations(self, i):
+        if self.anno_df is None:
+            bbox = np.empty((0, 4), dtype=np.float32)
+            label = np.empty((0, ), dtype=np.int32)
+            return bbox, label
         part_id, video_id, frame_id = self.ids[i].split('/')
         video_id = '{0}_{1}'.format(part_id, video_id)
         anno_mask = \
@@ -74,9 +78,10 @@ class EpicKitchensBboxDataset(GetterDataset):
             for bb_ in bb:
                 bbox.append(list(bb_))
                 label.append(lbl)
-        bbox = np.array(bbox, dtype=np.float32)
-        if len(bbox) > 0:
-            bbox = bbox[:, [0, 1, 3, 2]]
+        if len(bbox) == 0:
+            bbox = np.empty((0, 4), dtype=np.float32)
+        else:
+            bbox = np.array(bbox, dtype=np.float32)
             bbox[:, 2:4] += bbox[:, 0:2]
         label = np.array(label, dtype=np.int32)
         return bbox, label
