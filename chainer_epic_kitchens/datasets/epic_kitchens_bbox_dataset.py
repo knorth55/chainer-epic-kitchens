@@ -5,8 +5,7 @@ from chainercv.chainer_experimental.datasets.sliceable import GetterDataset
 from chainercv.utils import read_image
 import pandas as pd
 
-
-import epic_kitchens_utils
+from chainer_epic_kitchens.datasets import epic_kitchens_utils
 
 
 class EpicKitchensBboxDataset(GetterDataset):
