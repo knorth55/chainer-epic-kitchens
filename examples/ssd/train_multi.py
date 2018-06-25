@@ -26,7 +26,8 @@ from chainer_epic_kitchens.datasets import EpicKitchensBboxDataset
 
 def get_valid_indices(dataset):
     indices = []
-    for i, (_, bbox, label) in enumerate(dataset):
+    for i in range(len(dataset)):
+        bbox, label = dataset._get_annotations(i)
         if len(bbox) > 0 and len(label) > 0:
             indices.append(i)
     return indices
@@ -137,15 +138,15 @@ def main():
     chainer.cuda.get_device_from_id(device).use()
     model.to_gpu()
 
-    train = TransformDataset(
-        EpicKitchensBboxDataset(split='train'),
-        ('img', 'mb_loc', 'mb_label'),
-        Transform(model.coder, model.insize, model.mean))
-
+    train = EpicKitchensBboxDataset(split='train')
     if comm.rank == 0:
         indices = get_valid_indices(train)
     else:
         indices = None
+    train = TransformDataset(
+        train, ('img', 'mb_loc', 'mb_label'),
+        Transform(model.coder, model.insize, model.mean))
+
     indices = chainermn.scatter_dataset(indices, comm, shuffle=True)
     train = train.slice[indices]
 
@@ -186,7 +187,7 @@ def main():
         trainer.extend(extensions.snapshot(), trigger=(10000, 'iteration'))
         trainer.extend(
             extensions.snapshot_object(
-                model, 'model_iter_{.updater.iteration}'),
+                model, 'model_iter_{.updater.iteration}.npz'),
             trigger=(1, 'epoch'))
 
     if args.resume:
