@@ -71,12 +71,14 @@ class EpicKitchensBboxDataset(GetterDataset):
         bbox = []
         label = []
         for bb_str, lbl in anno_data[['bounding_boxes', 'noun_class']].values:
+            if lbl == 0:
+                continue
             bb = eval(bb_str)
             if len(bb) == 0:
                 continue
             for bb_ in bb:
                 bbox.append(list(bb_))
-                label.append(lbl)
+                label.append(lbl - 1)
         if len(bbox) == 0:
             bbox = np.empty((0, 4), dtype=np.float32)
         else:

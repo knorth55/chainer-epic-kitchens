@@ -12,7 +12,6 @@ def get_epic_kitchens(year):
 
 
 epic_kitchens_bbox_label_names = [
-    'Nothing',
     'pan',
     'pan:dust',
     'tap',
