@@ -26,7 +26,7 @@ from chainer_epic_kitchens.datasets import EpicKitchensBboxDataset
 
 def get_valid_indices(dataset):
     indices = []
-    for i, (_, bbox, label) in enumerate(zip(dataset)):
+    for i, (_, bbox, label) in enumerate(dataset):
         if len(bbox) > 0 and len(label) > 0:
             indices.append(i)
     return indices
