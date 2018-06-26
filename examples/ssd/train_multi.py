@@ -174,13 +174,12 @@ def main():
         trigger=triggers.ManualScheduleTrigger([8, 10], 'epoch'))
 
     if comm.rank == 0:
-        log_interval = 100, 'iteration'
+        log_interval = 10, 'iteration'
         trainer.extend(extensions.LogReport(trigger=log_interval))
         trainer.extend(extensions.observe_lr(), trigger=log_interval)
         trainer.extend(extensions.PrintReport(
             ['epoch', 'iteration', 'lr',
-             'main/loss', 'main/loss/loc', 'main/loss/conf',
-             'validation/main/map']),
+             'main/loss', 'main/loss/loc', 'main/loss/conf']),
             trigger=log_interval)
         trainer.extend(extensions.ProgressBar(update_interval=10))
 
