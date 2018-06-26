@@ -21,7 +21,7 @@ class EpicKitchensBboxDataset(GetterDataset):
             self.anno_df = pd.read_csv(anno_file)
             self.img_dir = os.path.join(
                 data_dir, 'object_detection_images/train')
-        else:
+        elif split == 'val':
             self.anno_df = None
             self.img_dir = os.path.join(
                 data_dir, 'object_detection_images/test')
