@@ -175,7 +175,7 @@ def main():
 
     if comm.rank == 0:
         log_interval = 10, 'iteration'
-        trainer.extend(extensions.LogReport(trigger=log_interval))
+        trainer.extend(extensions.LogReport(log_name='log.json', trigger=log_interval))
         trainer.extend(extensions.observe_lr(), trigger=log_interval)
         trainer.extend(extensions.PrintReport(
             ['epoch', 'iteration', 'lr',
