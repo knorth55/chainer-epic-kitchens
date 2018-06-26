@@ -37,23 +37,18 @@ def main():
         model.to_gpu()
 
     dataset = EpicKitchensBboxDataset(split=args.split)
-    indices = np.arange(len(dataset))
-    np.random.shuffle(indices)
-    for i in indices:
+    for i in np.arange(len(dataset)):
         img, _, _ = dataset[i]
         bboxes, labels, scores = model.predict([img])
         bbox, label, score = bboxes[0], labels[0], scores[0]
         if args.skip:
-            if len(bbox) > 0:
-                vis_bbox(
-                    img, bbox, label, score,
-                    label_names=epic_kitchens_bbox_label_names)
-                plt.show()
-        else:
-            vis_bbox(
-                img, bbox, label, score,
-                label_names=epic_kitchens_bbox_label_names)
-            plt.show()
+            if len(bbox) == 0:
+                print('skip {}.jpg'.format(dataset.ids[i]))
+                continue
+        vis_bbox(
+            img, bbox, label, score,
+            label_names=epic_kitchens_bbox_label_names)
+        plt.show()
 
 
 if __name__ == '__main__':
