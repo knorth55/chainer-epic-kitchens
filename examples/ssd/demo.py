@@ -1,5 +1,6 @@
 import argparse
 import numpy as np
+import os
 
 from chainer.backends import cuda
 from chainercv.links import SSD300
@@ -11,6 +12,9 @@ from chainer_epic_kitchens.datasets import epic_kitchens_bbox_label_names
 from chainer_epic_kitchens.datasets import EpicKitchensBboxDataset
 
 
+thisdir = os.path.abspath(os.path.dirname(__file__))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -18,7 +22,9 @@ def main():
     parser.add_argument(
         '--pretrained-model', default='imagenet')
     parser.add_argument('--gpu', type=int, default=-1)
+    parser.add_argument('--no-display', action='store_true')
     parser.add_argument('--random', action='store_true')
+    parser.add_argument('--save-path', type=str, default=None)
     parser.add_argument('--split', choices=('train', 'val'), default='val')
     parser.add_argument('--skip', action='store_true')
     parser.add_argument('--score-thresh', type=float, default=0.6)
@@ -52,7 +58,18 @@ def main():
         vis_bbox(
             img, bbox, label, score,
             label_names=epic_kitchens_bbox_label_names)
-        plt.show()
+
+        if args.save_path is not None:
+            save_path = os.path.join(thisdir, args.save_path)
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+            plt.savefig(
+                os.path.join(
+                    save_path,
+                    'vis_{}.png'.format(
+                        dataset.ids[i].replace('/', '_'))))
+        if not args.no_display:
+            plt.show()
 
 
 if __name__ == '__main__':
