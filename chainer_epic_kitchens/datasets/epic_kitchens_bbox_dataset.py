@@ -10,7 +10,10 @@ from chainer_epic_kitchens.datasets import epic_kitchens_utils
 
 class EpicKitchensBboxDataset(GetterDataset):
 
-    def __init__(self, data_dir='auto', year='2018', split='train'):
+    def __init__(
+            self, data_dir='auto', year='2018', split='train',
+            use_empty=False
+    ):
         super(EpicKitchensBboxDataset, self).__init__()
         if data_dir == 'auto':
             data_dir = epic_kitchens_utils.get_epic_kitchens(year)
@@ -44,6 +47,14 @@ class EpicKitchensBboxDataset(GetterDataset):
                     self.ids.append(
                         '{0}/{1}/{2}'.format(part_d, video_d,
                                              filename.split('.')[0]))
+
+        if self.anno_df is not None and not use_empty:
+            anno_ids = self.anno_df[self.anno_df['bounding_boxes'] != '[]']
+            anno_ids = anno_ids[['participant_id', 'video_id', 'frame']].values
+            anno_ids[:, 1] = [x[4:] for x in anno_ids[:, 1]]
+            anno_ids[:, 2] = ['{0:010d}'.format(x) for x in anno_ids[:, 2]]
+            anno_ids = ['/'.join(x) for x in anno_ids]
+            self.ids = sorted(list(set(self.ids) & set(anno_ids)))
 
         self.add_getter('img', self._get_image)
         self.add_getter(('bbox', 'label'), self._get_annotations)
