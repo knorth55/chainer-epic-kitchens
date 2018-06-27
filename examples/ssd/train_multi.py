@@ -183,7 +183,9 @@ def main():
             trigger=log_interval)
         trainer.extend(extensions.ProgressBar(update_interval=10))
 
-        trainer.extend(extensions.snapshot(), trigger=(10000, 'iteration'))
+        trainer.extend(extensions.snapshot(
+                model, 'snapshot_model.npz'),
+            trigger=(10000, 'iteration'))
         trainer.extend(
             extensions.snapshot_object(
                 model, 'model_iter_{.updater.iteration}.npz'),
