@@ -24,15 +24,6 @@ from chainer_epic_kitchens.datasets import epic_kitchens_bbox_label_names
 from chainer_epic_kitchens.datasets import EpicKitchensBboxDataset
 
 
-def get_valid_indices(dataset):
-    indices = []
-    for i in range(len(dataset)):
-        bbox, label = dataset._get_annotations(i)
-        if len(bbox) > 0 and len(label) > 0:
-            indices.append(i)
-    return indices
-
-
 class Transform(object):
 
     def __init__(self, coder, size, mean):
@@ -138,9 +129,9 @@ def main():
     chainer.cuda.get_device_from_id(device).use()
     model.to_gpu()
 
-    train = EpicKitchensBboxDataset(split='train')
+    train = EpicKitchensBboxDataset(year='2018', split='train')
     if comm.rank == 0:
-        indices = get_valid_indices(train)
+        indices = np.arange(len(train))
     else:
         indices = None
     train = TransformDataset(
@@ -175,17 +166,16 @@ def main():
 
     if comm.rank == 0:
         log_interval = 10, 'iteration'
-        trainer.extend(extensions.LogReport(log_name='log.json', trigger=log_interval))
+        trainer.extend(extensions.LogReport(
+            log_name='log.json', trigger=log_interval))
         trainer.extend(extensions.observe_lr(), trigger=log_interval)
-        trainer.extend(extensions.PrintReport(
-            ['epoch', 'iteration', 'lr',
-             'main/loss', 'main/loss/loc', 'main/loss/conf']),
+        trainer.extend(
+            extensions.PrintReport(
+                ['epoch', 'iteration', 'lr',
+                 'main/loss', 'main/loss/loc', 'main/loss/conf']),
             trigger=log_interval)
-        trainer.extend(extensions.ProgressBar(update_interval=10))
+        trainer.extend(extensions.ProgressBar(update_interval=1))
 
-        trainer.extend(extensions.snapshot(
-                model, 'snapshot_model.npz'),
-            trigger=(10000, 'iteration'))
         trainer.extend(
             extensions.snapshot_object(
                 model, 'model_iter_{.updater.iteration}.npz'),
