@@ -18,6 +18,7 @@ def main():
     parser.add_argument(
         '--pretrained-model', default='imagenet')
     parser.add_argument('--gpu', type=int, default=-1)
+    parser.add_argument('--random', action='store_true')
     parser.add_argument('--split', choices=('train', 'val'), default='val')
     parser.add_argument('--skip', action='store_true')
     parser.add_argument('--score-thresh', type=float, default=0.6)
@@ -37,7 +38,10 @@ def main():
         model.to_gpu()
 
     dataset = EpicKitchensBboxDataset(split=args.split)
-    for i in np.arange(len(dataset)):
+    indices = np.arange(len(dataset))
+    if args.random:
+        np.random.shuffle(indices)
+    for i in indices:
         img, _, _ = dataset[i]
         bboxes, labels, scores = model.predict([img])
         bbox, label, score = bboxes[0], labels[0], scores[0]
