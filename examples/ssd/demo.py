@@ -80,7 +80,7 @@ def main():
                 plt.savefig(
                     os.path.join(
                         save_path,
-                        'vis_{}.png'.format(
+                        '{}.png'.format(
                             dataset.ids[base_index + b_i].replace('/', '_'))))
             if not args.no_display:
                 plt.show()
