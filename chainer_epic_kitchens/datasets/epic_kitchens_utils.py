@@ -11,7 +11,7 @@ def get_epic_kitchens(year):
     return base_path
 
 
-epic_kitchens_bbox_label_names = [
+epic_kitchens_bbox_label_names = (
     'pan',
     'pan:dust',
     'tap',
@@ -362,4 +362,4 @@ epic_kitchens_bbox_label_names = [
     'funnel',
     'whisk',
     'driver:s',
-]
+)
