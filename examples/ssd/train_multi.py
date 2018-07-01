@@ -159,10 +159,10 @@ def main():
 
     updater = training.updaters.StandardUpdater(
         train_iter, optimizer, device=device)
-    trainer = training.Trainer(updater, (12, 'epoch'), args.out)
+    trainer = training.Trainer(updater, (18, 'epoch'), args.out)
     trainer.extend(
         extensions.ExponentialShift('lr', 0.1, init=1e-3),
-        trigger=triggers.ManualScheduleTrigger([8, 10], 'epoch'))
+        trigger=triggers.ManualScheduleTrigger([12, 15], 'epoch'))
 
     if comm.rank == 0:
         log_interval = 10, 'iteration'
