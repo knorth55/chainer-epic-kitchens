@@ -64,7 +64,8 @@ class Transform(object):
         label = label[param['index']]
 
         # label -> category
-        cat_label = get_epic_kitchens_category(label)
+        cat_label = np.array(
+            [get_epic_kitchens_category(l) for l in label], dtype=np.int32)
 
         # 4. Resizing with random interpolatation
         _, H, W = img.shape
