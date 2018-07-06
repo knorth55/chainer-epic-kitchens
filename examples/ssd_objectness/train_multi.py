@@ -110,6 +110,7 @@ def main():
     parser.add_argument(
         '--model', choices=('ssd300', 'ssd512'), default='ssd300')
     parser.add_argument('--batchsize', type=int, default=32)
+    parser.add_argument('--lr', type=float, default=1e-3)
     parser.add_argument('--out', default='result')
     parser.add_argument('--resume')
     args = parser.parse_args()
@@ -149,7 +150,6 @@ def main():
     train_iter = chainer.iterators.MultiprocessIterator(
         train, args.batchsize, n_processes=2)
 
-    # initial lr is set to 1e-3 by ExponentialShift
     optimizer = chainermn.create_multi_node_optimizer(
         chainer.optimizers.MomentumSGD(), comm)
     optimizer.setup(train_chain)
@@ -163,7 +163,7 @@ def main():
         train_iter, optimizer, device=device)
     trainer = training.Trainer(updater, (12, 'epoch'), args.out)
     trainer.extend(
-        extensions.ExponentialShift('lr', 0.1, init=1e-3),
+        extensions.ExponentialShift('lr', 0.1, init=args.lr),
         trigger=triggers.ManualScheduleTrigger([8, 10], 'epoch'))
 
     if comm.rank == 0:
