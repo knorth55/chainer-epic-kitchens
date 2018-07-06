@@ -11,6 +11,468 @@ def get_epic_kitchens(year):
     return base_path
 
 
+def get_epic_kitchens_category(label):
+    label_name = epic_kitchens_bbox_label_names[label]
+    for cat_l, cat in enumerate(epic_kitchens_bbox_category_names):
+        if label_name in eval(cat):
+            return cat_l
+    return None
+
+epic_kitchens_bbox_category_names = (
+    'vegetables',
+    'fruits',
+    'nuts',
+    'dairy',
+    'eggs',
+    'meat',
+    'seasonings',
+    'liquids',
+    'carbotydrate_ingredients',
+    'other_ingredients',
+    'baking',
+    'baked_food',
+    'cooked_food',
+    'packaging',
+    'containers',
+    'cutlery',
+    'kitchenware',
+    'appliances',
+    'other_objects',
+    'fire',
+    'furniture',
+    'clothes',
+    'trash',
+    'detergents',
+    'human',
+    'uncategorised',
+)
+
+vegetables = (
+    'onion',
+    'potato',
+    'tomato',
+    'garlic',
+    'salad',
+    'carrot',
+    'leaf',
+    'vegetable',
+    'lettuce',
+    'courgette',
+    'mushroom',
+    'cucumber',
+    'squash',
+    'corn',
+    'aubergine',
+    'paste:garlic',
+    'avocado',
+    'leek',
+    'onion:spring',
+    'cabbage',
+    'bean:green',
+    'celery',
+    'spinach',
+    'broccoli',
+    'pea',
+    'kale',
+    'sprout',
+    'artichoke',
+    'asparagus',
+    'ring:onion',
+)
+
+fruits = (
+    'peach',
+    'olive',
+    'kiwi',
+    'banana',
+    'lemon',
+    'lime',
+    'grape',
+    'blueberry',
+    'melon',
+    'pear',
+    'raisin',
+    'apple',
+    'berry',
+    'fruit',
+    'cherry',
+    'pineapple',
+    'pith',
+)
+
+nuts = (
+    'nut:pine',
+    'coconut',
+    'almond',
+)
+
+dairy = (
+    'cheese',
+    'milk',
+    'yoghurt',
+    'cream',
+    'butter'
+)
+
+eggs = ('egg')
+
+meat = (
+    'meat',
+    'chicken',
+    'fish',
+    'sausage',
+    'bacon',
+    'burger:tuna',
+    'tuna',
+    'salami',
+    'salmon',
+    'beef',
+    'stick:crab',
+    'shrimp',
+    'turkey',
+)
+
+seasonings = (
+    'spice',
+    'pepper',
+    'salt',
+    'curry',
+    'ginger',
+    'chilli',
+    'pesto',
+    'sugar',
+    'powder:coconut',
+    'seed',
+    'coriander',
+    'dressing:salad',
+    'paprika',
+    'cumin',
+    'flake:chilli',
+    'caper',
+    'mayonnaise',
+    'cinnamon',
+    'tahini',
+    'turmeric',
+    'syrup',
+    'mustard',
+    'ketchup',
+    'pepper:cayenne',
+    'herb',
+    'oregano',
+    'parsley',
+    'basil',
+    'mint',
+    'thyme',
+    'leaf:mint',
+    'grass:lemon',
+    'garni:bouquet',
+    'sauce',
+    'honey',
+    'nutella',
+    'butter:peanut',
+    'chocolate',
+    'chip',
+    'crisp',
+    'rosemary',
+    'gravy',
+    'tarragon',
+)
+
+liquids = (
+    'oil',
+    'coffee',
+    'liquid',
+    'tea',
+    'water',
+    'vinegar',
+    'wine',
+    'smoothie',
+    'juice',
+    'mocha',
+    'beer',
+    'nesquik',
+    'coke',
+    'drink',
+    'alcohol',
+)
+
+carbotydrate_ingredients = (
+    'pasta',
+    'rice',
+    'cereal',
+    'skin',
+    'mixture',
+    'noodle',
+    'oat',
+    'roll',
+    'oatmeal',
+    'hummus',
+    'dumpling',
+    'tofu',
+    'bar:cereal',
+    'breadcrumb',
+    'popcorn',
+)
+
+other_ingredients = (
+    'ingredient',
+    'stock',
+    'leftover',
+)
+
+baking = (
+    'dough',
+    'ball',
+    'flour',
+    'yeast',
+    'quorn',
+)
+
+baked_food = (
+    'bread',
+    'tortilla',
+    'pizza',
+    'biscuit',
+    'pie',
+    'cake',
+    'pancake',
+    'croissant',
+    'muffin',
+    'waffle',
+)
+
+cooked_food = (
+    'food',
+    'risotto',
+    'omelette',
+    'soup',
+    'sandwich',
+    'paella',
+    'fishcakes',
+    'mat:sushi',
+    'casserole',
+    'jambalaya',
+)
+
+packaging = (
+    'package',
+    'bag',
+    'wrap',
+    'paper',
+    'foil',
+    'wrap:plastic',
+    'capsule',
+    'scrap',
+    'tube',
+)
+
+containers = (
+    'box',
+    'container',
+    'bottle',
+    'jar',
+    'jug',
+    'cover',
+    'can',
+    'basket',
+    'cap',
+    'support',
+    'backpack',
+    'cork',
+)
+
+cutlery = (
+    'knife',
+    'spoon',
+    'spatula',
+    'fork',
+    'cutlery',
+    'chopstick',
+    'ladle',
+    'straw',
+)
+
+kitchenware = (
+    'pan',
+    'plate',
+    'bowl',
+    'pot',
+    'cup',
+    'lid',
+    'board:chopping',
+    'glass',
+    'tray',
+    'filter',
+    'scissors',
+    'brush',
+    'peeler:potato',
+    'strainer',
+    'utensil',
+    'tongs',
+    'pestle',
+    'mortar',
+    'grater',
+    'grinder',
+    'base',
+    'pin:rolling',
+    'holder:filter',
+    'time',
+    'presser',
+    'timer',
+    'slicer',
+    'clip',
+    'whetstone',
+    'cutter:pizza',
+    'juicer:lime',
+    'mesh',
+    'shaker:pepper',
+    'squeezer:lime',
+    'rubber',
+    'opener:bottle',
+    'masher',
+    'colander',
+    'funnel',
+    'whisk',
+)
+
+appliances = (
+    'tap',
+    'fridge',
+    'hob',
+    'oven',
+    'kettle',
+    'maker:coffee',
+    'dishwasher',
+    'microwave',
+    'machine:washing',
+    'processor:food',
+    'grill',
+    'freezer',
+    'scale',
+    'heater',
+    'cooker:slow',
+    'toaster',
+    'button',
+    'blender',
+    'heat',
+    'plug',
+    'phone',
+    'watch',
+    'fan:extractor',
+    'flame',
+    'tab',
+    'wire',
+    'control:remote',
+    'alarm',
+    'power',
+    'stereo',
+    'boiler',
+    'lead',
+)
+
+other_objects = (
+    'lighter',
+    'envelope',
+    'book',
+    'hat',
+    'cd',
+    'slipper',
+    'ladder',
+    'driver:screw',
+)
+
+fire = ('fire')
+
+furniture = (
+    'cupboard',
+    'drawer',
+    'sink',
+    'top',
+    'rack:drying',
+    'table',
+    'kitchen',
+    'mat',
+    'shelf',
+    'floor',
+    'switch',
+    'chair',
+    'desk',
+    'candle',
+    'boilder',
+    'light',
+    'handle',
+    'knob',
+    'mouse',
+    'door:kitchen',
+    'rug',
+    'tablet',
+    'window',
+    'stand',
+    'tail',
+    'rim',
+    'wall',
+    'lamp',
+)
+
+clothes = (
+    'cloth',
+    'clothes',
+    'glove:oven',
+    'towel',
+    'napkin',
+    'towel:kitchen',
+    'tablecloth',
+    'shirt',
+    'apron',
+    'poster',
+    'tissue',
+    'label',
+    'boxer',
+    'guard:hand',
+    'sock',
+    'sticker',
+    'trousers',
+    'sleeve',
+    'sheets',
+    'trouser',
+)
+
+trash = (
+    'bin',
+    'rubbish',
+    'shell:egg',
+)
+
+detergents = (
+    'sponge',
+    'liquid:washing',
+    'dish:soap',
+    'soap',
+    'rinse',
+    'powder:washing',
+    'spot',
+    'pan:dust',
+    'remover:spot',
+)
+
+human = (
+    'finger',
+    'hand'
+)
+
+uncategorised = (
+    'content',
+    'rest',
+    'part',
+    'form',
+    'supplement',
+    'dust',
+    'instruction',
+    'recipe',
+    'air',
+    'heart',
+)
+
 epic_kitchens_bbox_label_names = (
     'pan',
     'pan:dust',
@@ -361,5 +823,6 @@ epic_kitchens_bbox_label_names = (
     'heart',
     'funnel',
     'whisk',
-    'driver:s',
+    'driver:screw',
+    'trouser',
 )
